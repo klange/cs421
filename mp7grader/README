@@ -1,0 +1,73 @@
+Welcome to the CS421 grading program. 
+
+The files you need to edit in this bundle are:
+- mpX-skeleton.mll (first rename to mpX.mll, then modify)
+- tests (add new test cases)
+No other file should be edited. You will only submit mpX.mll.
+
+To run the grading program:
+
+(In these items, mpX refers to mp1, mp2, mp3, etc)
+
+0.  IMPORTANT:  Make sure your solution defines every function we ask you
+    to define.  For example, suppose we ask you to define the function
+	
+        splat : 'a list -> 'a list list
+		
+    but for whatever reason, you decide you don't want to write the 
+    splat function.  Then please define the splat function as 
+    follows:
+	
+        let splat lst = raise (Failure(""))
+		
+    If you forget to define a function, the grading program will not 
+    compile; you won't receive any credit if the grading program does not 
+    compile. 
+
+    You can use mpX-skeleton.mll file for your convenience. This file
+    includes definitions for all the functions, and is compilable.
+
+    IT IS STRONGLY RECOMMENDED THAT YOU START WORKING FROM THE SKELETON FILE.
+
+1.  Your solution should be called mpX.mll  You may rename your file with
+	
+        mv mp1-skeleton.mll mpX.mll
+
+    WARNING: Makefile copies your mpX.mll as student.mll, and then compiles it. 
+    Do not have any important file named student.mll, or else it will be 
+    overwritten and you will lose it.
+		
+2.  Your file has to reside in this directory.
+
+3.  Execute
+	
+        make
+		
+    to build the grader.  
+    
+    If the grader does not build, make sure you have your solution named 
+    mpX.mll.
+	
+    Secondly, the grading program won't build if your solution's functions
+    do not have the correct types, or if a function is not defined (see #0).
+
+4.  Run
+		
+        ./grader
+		
+    to see how well your solution does.
+
+5.  If you make changes to your solution, be sure to re-run make (step #3).
+    If you forget to re-run gmake, your changes won't have any effect on the
+    grader program. Do not forget that your solution will be graded using 
+    many more test cases than provided to you. You are encouraged to test your
+    solution against more cases.
+
+7.  The rubric provided is not extensive. You should add many more test cases 
+    to increase your confidence that your implementation is correct. The grading
+    rubric will include many more tests than the one provided to you.
+
+    IMPORTANT: Add new test cases to the "tests" file to increase your confidence
+    about your implementation.
+
+

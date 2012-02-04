@@ -1,0 +1,70 @@
+open Mp6common
+let rubric_version = "1.0"
+let rubric_title = "CS421 Fall 2010 MP6"
+
+(**************************************************************************
+ * You can add new test cases by adding new elements to the following lists
+ * Format is:
+ * TEST<X>ARG(<weight>, <function_name>, <arg1>, <arg2>, ..., <argX>)
+ *
+ * <X> is the number of argument that the function being tested takes.
+ **************************************************************************)
+
+let asMonoTy1     () = Solution.canonicalize(Solution.asMonoTy1 ())
+let asMonoTy1_stu () = Solution.canonicalize(Student.asMonoTy1 ())
+let asMonoTy2     () = Solution.canonicalize(Solution.asMonoTy2 ())
+let asMonoTy2_stu () = Solution.canonicalize(Student.asMonoTy2 ())
+let asMonoTy3     () = Solution.canonicalize(Solution.asMonoTy3 ())
+let asMonoTy3_stu () = Solution.canonicalize(Student.asMonoTy3 ())
+let asMonoTy4     () = Solution.canonicalize(Solution.asMonoTy4 ())
+let asMonoTy4_stu () = Solution.canonicalize(Student.asMonoTy4 ())
+
+let indices = [0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20];;
+let subst_fun     l = let f = Solution.subst_fun l in List.map f indices;;
+let subst_fun_stu l = let f = Student.subst_fun  l in List.map f indices;;
+
+let unify     l = match (Solution.unify l) with None -> None 
+                  | Some lst -> (match (Solution.unify (subst_to_eqlst lst)) with None -> None
+                                 | Some(nlst) -> Some(subst_sort nlst))
+let unify_stu l = match (Student.unify l)  with None -> None 
+                  | Some lst -> (match (Solution.unify (subst_to_eqlst lst)) with None -> None
+                                 | Some(nlst) -> Some(subst_sort nlst))
+
+
+(* This list is for regular problems *)
+let rubric =
+[
+  (* Problem 1: Not graded, only to warm up. Hence, weight is 0. *)
+  TEST1ARG_TWOFUN(0, asMonoTy1, asMonoTy1_stu, ());
+  TEST1ARG_TWOFUN(0, asMonoTy2, asMonoTy2_stu, ());
+  TEST1ARG_TWOFUN(0, asMonoTy3, asMonoTy3_stu, ());
+  TEST1ARG_TWOFUN(0, asMonoTy4, asMonoTy4_stu, ());
+
+  (* Problem 5 -- 4 points*)
+  TEST1ARG_TWOFUN(1, subst_fun, subst_fun_stu, [(5, mk_fun_ty bool_ty (TyVar(2)))]);
+  
+  (* Problem 3 -- 4 points*)
+  TEST2ARG(1, monoTy_lift_subst, [(5, mk_fun_ty bool_ty (TyVar(2)))],
+             (TyConst ({name = "->"; arity = 2}, [TyVar 1; TyVar 5])));
+  
+  (* Problem 4 -- 5 points*)
+  TEST2ARG(1, occurs, 0, (TyConst ({name = "->"; arity = 2}, [TyVar 0; TyVar 0])));
+  
+  (* Problem 5 -- 64 points*)
+  TEST1ARG_TWOFUN(1, unify, unify_stu, ([(TyVar 0, 
+           TyConst ({name = "list"; arity = 1}, 
+             [TyConst ({name = "int"; arity = 0}, [])]));
+          (TyConst ({name = "->"; arity = 2}, [TyVar 0; TyVar 0]),
+           TyConst ({name = "->"; arity = 2}, [TyVar 0; TyVar 1]))]))
+]
+
+(* This list is for extra credit problems *)
+let extra_rubric = [
+  TEST2ARG(1, equiv_types, 
+    (TyConst
+      ({name = "->"; arity = 2},
+      [TyVar 4; TyConst ({name = "->"; arity = 2}, [TyVar 3; TyVar 4])])),
+    (TyConst
+      ({name = "->"; arity = 2},
+      [TyVar 3; TyConst ({name = "->"; arity = 2}, [TyVar 4; TyVar 3])])))
+]

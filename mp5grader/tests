@@ -1,0 +1,117 @@
+open Mp5common
+let rubric_version = "1.0"
+let rubric_title = "CS421 Fall 2011 MP5"
+
+(**************************************************************************
+ * You can add new test cases by adding new elements to the following lists
+ * Format is:
+ * TEST<X>ARG(<weight>, <function_name>, <arg1>, <arg2>, ..., <argX>)
+ *
+ * <X> is the number of argument that the function being tested takes.
+ **************************************************************************)
+
+let infer tree = Mp5common.canon (Mp5common.infer Solution.gather_ty_substitution [] tree);;
+let infer_stu tree =
+    Mp5common.canon (Mp5common.infer Student.gather_ty_substitution  [] tree);;
+
+let infer2 gamma tree =
+    Mp5common.canon (Mp5common.infer Solution.gather_ty_substitution gamma tree);;
+let infer2_stu gamma tree =
+    Mp5common.canon (Mp5common.infer Student.gather_ty_substitution  gamma tree);;
+
+(* environment *)
+let env0 = [];;
+let env1 = make_env "f" ([0], mk_fun_ty bool_ty (TyVar 0));;
+
+(* simple expressions *)
+let con_exp1 = ConExp(Bool true);;
+let var_exp1 = VarExp "f";;
+let bin_exp1 = BinExp(Cons, ConExp (Int 62), ConExp Nil);;
+let mon_exp1 = MonExp(Print, ConExp(Int 62));;
+let if_exp1 = IfExp(ConExp(Bool true), ConExp(Int 62), ConExp(Int 252));;
+let fun_exp1 = FunExp("x", BinExp(Add, VarExp "x", VarExp "x"));;
+let app_exp1 = AppExp((FunExp("x", BinExp(Add, VarExp "x", VarExp "x"))), ConExp(Int 62));;
+let let_exp1 = LetExp("y", ConExp(Int 5), BinExp(Add, VarExp "y", VarExp "y"));;
+let rec_exp1 =
+	RecExp("fact", "n",
+		IfExp(
+			BinExp(Eq, VarExp "n", ConExp(Int 0)),
+			ConExp(Int 1),
+			BinExp(Mul, VarExp "n", AppExp(VarExp "fact", BinExp(Sub, VarExp "n", ConExp(Int 1))))),
+		AppExp(VarExp "fact", ConExp(Int 5)));;
+let raise_exp1 = RaiseExp(IfExp(ConExp(Bool true), ConExp(Int 62), ConExp(Int 252)));;
+let try_exp1 =
+	TryWithExp(
+		BinExp(Concat, ConExp(String "What"), RaiseExp(ConExp(Int 3))),
+		(Some 0, ConExp(String " do you mean?")),
+		[
+			(None, ConExp(String " the heck?"))
+		]);;
+
+(* more complicated expressions *)
+(* fun f -> if true then let g = fun y -> f y + 2 in 0 else let x = f 4 in 1 *)
+let comp_exp1 =
+	FunExp("f",
+		IfExp(ConExp (Bool true),
+			LetExp("g",
+				FunExp("y",
+					BinExp(Add,
+						AppExp(VarExp "f", VarExp "y"),
+						ConExp(Int 2))),
+				ConExp(Int 0)),
+			LetExp("x",
+				AppExp(VarExp "f", ConExp(Int 4)),
+				ConExp(Int 1))));;
+
+(* let f = (fun x -> 62) in f;; *)	
+let comp_exp2 =
+	LetExp("f",
+		FunExp("x", ConExp(Int 62)),
+		VarExp "f");;
+
+(* let f = (fun x -> 62) in if true then f true else f 252;; *)
+let comp_exp3 =
+	LetExp("f",
+		FunExp("x", ConExp(Int 62)),
+		IfExp(ConExp(Bool true),
+			AppExp(VarExp "f", ConExp(Bool true)),
+			AppExp(VarExp "f", ConExp(Int 252))
+		));;
+
+(*
+let prob3 =  (IfExp (ConstExp (BoolConst true), ConstExp (IntConst 1), VarExp "x"))
+let prob5 = (FunExp ("x", AppExp(AppExp(BinOpExp "+", VarExp "x"), VarExp "x")))
+let prob6 = (LetInExp("y", ConstExp(IntConst 5), AppExp(AppExp(BinOpExp "+", VarExp "y"), VarExp "y")))
+let prob7 = (LetRecInExp("ones", AppExp(AppExp(BinOpExp "::",ConstExp(IntConst 1)), VarExp "ones"), VarExp "ones"))
+let prob8 = (RaiseExp (IfExp (ConstExp (BoolConst true), ConstExp (IntConst 3), ConstExp (IntConst 4))))
+let probExtra = (TryWithExp(AppExp (AppExp(BinOpExp "^",
+                             ConstExp (StringConst "What")),
+                      RaiseExp (ConstExp (IntConst 3))),
+              (Some 0, ConstExp (StringConst " do you mean?")),
+              [(None, ConstExp (StringConst " the heck?"))]))
+*)
+
+(* This list is for regular problems *)
+let rubric =
+[
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, con_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env1, var_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, bin_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, mon_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, if_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, fun_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, app_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, let_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, rec_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, raise_exp1);
+
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, comp_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, comp_exp1);
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, comp_exp1)
+]
+
+(* This list is for extra credit problems *)
+let extra_rubric = [
+	TEST2ARG_TWOFUN(1, infer2, infer2_stu, env0, try_exp1)
+]
+

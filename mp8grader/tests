@@ -1,0 +1,86 @@
+open Mp8common
+let rubric_version = "1.0"
+let rubric_title = "CS421 Fall 2008 MP8"
+
+(**************************************************************************
+ * You can add new test cases by adding new elements to the following lists
+ * Format is:
+ * TEST<X>ARG(<weight>, <function_name>, <arg1>, <arg2>, ..., <argX>)
+ *
+ * <X> is the number of argument that the function being tested takes.
+ **************************************************************************)
+
+let parse s = Solution.main Picomllex2.token (Lexing.from_string s)
+let parse_stu s = Student.main  Picomllex.token  (Lexing.from_string s)
+
+
+(* Test cases should go in this list. 
+ * The first element of the pair is the weight of the case,
+ * and the second is the string to be given to the parser.
+ *)
+
+(* This list is for regular problems *)
+let test_cases = [
+(*Problem 1*)
+1, "\"hi\";;"; 
+
+(*Problem 2*)
+1, "(\"hi\");;";
+
+(*Problem 3*)
+1, "(\"hi\",3);;";
+
+(*Problem 4*)
+1, "hd [];;";
+
+(*Problem 5*)
+1, "3 + 4 * 8;;";
+
+(*Problem 6*)
+1, "3 > 5;;";
+
+(*Problem 7*)
+1, "3 :: 2 :: 1 :: [];;";
+
+(*Problem 8*)
+1, "let rec f x = 3 :: x :: (f x) in f 8;;";
+
+(*Problem 9*)
+1, "if true then fun x -> 3 else fun x -> 4;;";
+
+(*Problem 10*)
+1, "(fun x -> x + x + 3) 4;;";
+
+(*Problem 11*)
+1, "true || false && true;;";
+
+(*Problem 12*)
+1, "raise (fun x -> x) 4 + 3;;";
+
+
+(* Mixed tests to check precedences. *)
+(* MANY MORE TESTS WILL BE ADDED HERE IN THE FINAL GRADER *)
+1, "3 - 4 - 2 * 9 < 10 && true;;";
+1, "if true then 1 else 0 + 2;;";
+1, "(fun x -> ()) 3;;"
+
+]
+
+
+(* This list is for extra credit problems *)
+let extra_test_cases = [
+(*Problem 12*)
+1, "[1; 2; 3];;";
+(*Problem 13*)
+1, "try 0 with 1 -> 1 | 2 -> try 2 with _ -> 3 | 4 -> 4;;"
+]
+
+
+let rubric = List.map 
+             (fun (w,s) -> TEST1ARG_TWOFUN(w, parse, parse_stu, s))
+             test_cases
+
+
+let extra_rubric = List.map 
+             (fun (w,s) -> TEST1ARG_TWOFUN(w, parse, parse_stu, s))
+             extra_test_cases

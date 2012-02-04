@@ -1,0 +1,23 @@
+(**************************************************************************
+ * You can add new test cases by adding new elements to the following lists
+ * Format is:
+ * TEST<X>ARG(<weight>, <function_name>, <arg1>, <arg2>, ..., <argX>)
+ *
+ * <X> is the number of argument that the function being tested takes.
+ **************************************************************************)
+
+(* This list is for regular problems *)
+let rubric =
+[
+     TEST0ARG(1, x) ;
+     TEST0ARG(1, salute) ;
+     TEST1ARG(1, times_13, 7) ;
+     TEST1ARG(1, square_plus_x, 23.17) ; 
+     TEST1ARG(1, hail, "Thomas") ;
+     TEST2ARG(1, has_smallest_abs, 4, 6) ;
+     TEST1ARG(1, swap_pair, (3, "hi")) ;
+     TEST2ARG(1, pair_app, (Solution.times_13, fun a -> a + 2), 6)
+]
+(* Note: the last entry should not be followed by a semicolon. *)
+
+let extra_rubric = [ ]

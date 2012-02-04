@@ -1,0 +1,43 @@
+let rubric_version = "1.0"
+let rubric_title = "CS421 Fall 2011 MP7"
+
+(**************************************************************************
+ * You can add new test cases by adding new elements to the following lists
+ * Format is:
+ * TEST<X>ARG(<weight>, <function_name>, <arg1>, <arg2>, ..., <argX>)
+ *
+ * <X> is the number of argument that the function being tested takes.
+ **************************************************************************)
+
+(* Test cases should go in this list. 
+ * The first element of the pair is the weight of the case,
+ * and the second is the string to be given to the parser.
+ *)
+
+let fail_get_all_tokens_stu s = try Util.timer 4 (fun () -> Student.try_get_all_tokens s) with _ -> None
+let fail_get_all_tokens s = try Util.timer 4 (fun () -> Solution.try_get_all_tokens s) with _ -> None
+
+(* This list is for regular problems *)
+let rubric = [
+  TEST1ARG(1, get_all_tokens, "let = in ;; + ** , ; ( - )");
+  TEST1ARG(1, get_all_tokens, "42 100.5 0");
+  TEST1ARG(1, get_all_tokens, "true false ()");
+  TEST1ARG(1, get_all_tokens, "this is where if");
+  TEST1ARG(1, get_all_tokens, "this (* is a *) test");
+  TEST1ARG(1, get_all_tokens, "this // is a test");
+  TEST1ARG(1, get_all_tokens, "this // is a\n test");
+  TEST1ARG(1, try_get_all_tokens, "this (* is (* a test *)");
+
+  TEST1ARG(1, get_all_tokens, "\"some string\"");
+  TEST1ARG(1, get_all_tokens, "\" she said, \\\"hello\\\"\"");
+  TEST1ARG(1, get_all_tokens, "\" \\100 \\011 \"");
+  TEST1ARG(1, get_all_tokens, "\"next line \\n starts here; indentation \\t starts here next string\" \"starts here\"");
+
+  TEST1ARG_TWOFUN(1, fail_get_all_tokens, fail_get_all_tokens_stu, "\"\\no\"")
+]
+
+let extra_rubric = [
+TEST1ARG(1, try_comm_get_all_tokens, "aaaa\nbbbb\nc(*\n");
+TEST1ARG(1, try_comm_get_all_tokens, "let\n123\n\"hi\\n\"*)\n");
+TEST1ARG(1, try_comm_get_all_tokens, "aaaa\nbbbb**)\nc\n")
+]

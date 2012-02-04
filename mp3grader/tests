@@ -1,0 +1,88 @@
+(**************************************************************************
+ * You can add new test cases by adding new elements to the following lists
+ * Format is:
+ * TEST<X>ARG(<weight>, <function_name>, <arg1>, <arg2>, ..., <argX>)
+ *
+ * <X> is the number of argument that the function being tested takes.
+ **************************************************************************)
+
+let replace_if2_stu p v lst = List.fold_right (Student.replace_if_rec p v) lst Student.replace_if_base
+let replace_if2_sol p v lst = List.fold_right (Solution.replace_if_rec p v) lst Solution.replace_if_base
+
+let not_same_next2_stu lst = List.fold_right Student.not_same_next_rec lst Student.not_same_next_base
+let not_same_next2_sol lst = List.fold_right Solution.not_same_next_rec lst Solution.not_same_next_base
+
+let exists_pred2_stu p lst = List.fold_left (Student.exists_pred_rec p) Student.exists_pred_base lst
+let exists_pred2_sol p lst = List.fold_left (Solution.exists_pred_rec p) Solution.exists_pred_base lst
+
+let count_if2_stu p lst = List.fold_left (Student.count_if_rec p) Student.count_if_base lst
+let count_if2_sol p lst = List.fold_left (Solution.count_if_rec p) Solution.count_if_base lst
+
+let idk = fun x -> x
+let nullk = fun x -> ()
+
+(* This list is for regular problems *)
+let rubric =
+[
+  TEST3ARG(1, replace_if, (fun x -> x > 3), 62, [1;2;3;4;5]) ;
+  TEST3ARG(0, replace_if, (fun x -> x > 3.), 62., [1.;2.;3.;4.;5.]) ;
+
+  TEST1ARG(1, partial_sums, [4.0;2.2;7.5]) ;
+
+  TEST1ARG(1, not_same_next, [1;2;2;3;2;1]) ;
+  TEST1ARG(0, not_same_next, [1.;2.;2.;3.;2.;1.]) ;
+
+  TEST2ARG(1, exists_pred, (fun x -> x mod 2 = 0), [1;2;3;4]) ;
+  TEST2ARG(0, exists_pred, (fun x -> x > 3.), [1.;2.;3.;4.]) ;
+
+  TEST2ARG(1, count_if, (fun x -> x > 3), [1;2;3;4;5]) ;
+  TEST2ARG(0, count_if, (fun x -> x > 3.), [1.;2.;3.;4.;5.]) ;
+
+  TEST1ARG(1, min_element, [1;1;2;3;4]) ;
+  TEST1ARG(0, min_element, [1.;1.;2.;3.;4.]) ;
+
+  TEST3ARG_TWOFUN(1, replace_if2_sol, replace_if2_stu,
+   (fun x -> x > 3), 62, [1;2;3;4;5]) ;
+  TEST3ARG_TWOFUN(0, replace_if2_sol, replace_if2_stu,
+   (fun x -> x > 3.), 62., [1.;2.;3.;4.;5.]) ;
+
+  TEST1ARG_TWOFUN(1, not_same_next2_sol, not_same_next2_stu, [1;2;2;3;2;1]) ;
+  TEST1ARG_TWOFUN(0, not_same_next2_sol, not_same_next2_stu, [1.;2.;2.;3.;2.;1.]) ;
+
+  TEST2ARG_TWOFUN(1, exists_pred2_sol, exists_pred2_stu, (fun x -> x mod 2 = 0), [1;2;3;4]);
+  TEST2ARG_TWOFUN(0, exists_pred2_sol, exists_pred2_stu, (fun x -> x > 3.), [1.;2.;3.;4.]);
+
+  TEST2ARG_TWOFUN(1, count_if2_sol, count_if2_stu, (fun x -> x > 3), [1;2;3;4;5]);
+  TEST2ARG_TWOFUN(0, count_if2_sol, count_if2_stu, (fun x -> x > 3.), [1.;2.;3.;4.;5.]);
+
+  TEST2ARG(1, cross_prod, [1;2], ["hello"; "world"]) ;
+  TEST2ARG(0, cross_prod, ["hello"; "world"], [1;2]) ;
+
+  TEST3ARG(1, subk, 10, 5, idk) ;
+  TEST3ARG(0, subk, 10, 5, nullk) ;
+  TEST3ARG(1, addk, 3, 4, idk) ;
+  TEST3ARG(0, addk, 3, 4, nullk) ;
+  TEST3ARG(0, (fun a b k -> (subk a b (fun c -> addk c 2 (fun d -> timesk d b (fun e -> plusk (float e) (float a) (fun f -> multk 3.0 f (fun g -> lessk g 0.0 (fun h -> eqk h true (fun i -> consk i [] k))))))))), 5, 7, idk);
+  TEST3ARG(0, (fun a b k -> (subk a b (fun c -> addk c 2 (fun d -> timesk d b (fun e -> plusk (float e) (float a) (fun f -> multk 3.0 f (fun g -> lessk g 0.0 (fun h -> eqk h true (fun i -> consk i [] k))))))))), 5, 7, nullk);
+  TEST3ARG(0, (fun s t k -> consk s t (fun u -> eqk u t (fun v -> lessk false v k))), "hi", ["bye"], idk);
+  TEST3ARG(0, (fun s t k -> consk s t (fun u -> eqk u t (fun v -> lessk false v k))), "hi", ["bye"], nullk);
+
+  TEST5ARG(1, abcdk, 2.0, 3.0, 4.0, 5.0, idk) ;
+  TEST5ARG(0, abcdk, 2.0, 3.0, 4.0, 5.0, nullk) ;
+
+  TEST2ARG(1, partial_sumsk, [4.0;2.2;7.5], idk) ;
+  TEST2ARG(0, partial_sumsk, [4.0;2.2;7.5], nullk) ;
+
+  TEST3ARG(1, count_ifk, (fun x k -> k(x > 3)), [1;2;3;4;5], idk);
+  TEST3ARG(0, count_ifk, (fun x k -> k(x > 3)), [1;2;3;4;5], nullk);
+  TEST3ARG(0, count_ifk, (fun x k -> k(x > 3.)), [1.;2.;3.;4.;5.], idk)
+]
+(* Note: the last entry should not be followed by a semicolon. *)
+
+(* This list is for extra credit problems *)
+let extra_rubric = [
+  TEST2ARG(1, min_elementk, [], idk);
+  TEST2ARG(0, min_elementk, [1;1;2;3;4], idk) ;
+  TEST2ARG(0, min_elementk, [1.;1.;2.;3.;4.], idk)
+]
+

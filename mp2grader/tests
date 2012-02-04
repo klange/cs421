@@ -1,0 +1,46 @@
+(**************************************************************************
+ * You can add new test cases by adding new elements to the following lists
+ * Format is:
+ * TEST<X>ARG(<weight>, <function_name>, <arg1>, <arg2>, ..., <argX>)
+ *
+ * <X> is the number of argument that the function being tested takes.
+ **************************************************************************)
+
+(* This list is for regular problems *)
+let rubric =
+[
+     TEST1ARG(1, rat_eq, ((1,2),(3,4)));
+
+     TEST1ARG(1, ackermann, (3,4));
+
+     TEST2ARG(1, list_ex, (fun x -> x < 0), [1;-1;0;4;-2;5]);
+     TEST2ARG(1, list_ex, (fun x -> x < 0.), [-1.;2.;3.]);
+
+     TEST2ARG(1, elem, 5, [1;34;42;6]);
+     TEST2ARG(1, elem, 5., [1.;34.;42.;6.]);
+
+     TEST1ARG(1, to_float_list, [1;2;3]);
+
+     TEST1ARG(1, sum, [0.;2.;5.]);
+
+     TEST2ARG(1, zip, [1;2], ["hello"; "world"]);
+     TEST2ARG(1, zip, ["hello"; "world"], [1;2]);
+
+     TEST1ARG(1, split, [(1,"hello");(2,"world")]);
+     TEST1ARG(1, split, [("hello",1);("world",2)]);
+
+     TEST2ARG(1, cross, [1;2], ["hello"; "world"]);
+     TEST2ARG(1, cross, ["hello"; "world"], [1;2]);
+
+     TEST1ARG(1, freq_to_prob, [3;7;9]);
+
+     TEST1ARG(1, expected, [(1.,0.5);(2.,0.5)]);
+
+     TEST2ARG(1, accept, ([0; 1; 2],["a"; "b"], (fun q _ -> (q + 1) mod 3), 0, [2]), ["a"; "a"; "a"])
+]
+(* Note: the last entry should not be followed by a semicolon. *)
+
+let extra_rubric = 
+[ 
+     TEST1ARG(1, valid_dfa, ([0; 1; 2],["a"; "b"], (fun q _ -> (q + 1) mod 3), 0, [3]))
+]
